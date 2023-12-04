@@ -66,13 +66,18 @@ public class Day01 {
 
     private static void partTwoResult() throws IOException {
 
+        int result = 0;
         numbersMap = createStringIntegerMap();
 
         final List<String> fileLines = openFile.readAllFile(sampleInputPathV2);
         commonUtils.logList(fileLines);
 
-        System.out.println(firstNumberInLinePart2(fileLines.get(0)));
-        System.out.println(lastNumberInLinePart2(fileLines.get(0)));
+        for(String line: fileLines) {
+            System.out.println(line);
+            result += firstNumberInLinePart2(line) * 10 + lastNumberInLinePart2(line);
+        }
+
+        System.out.println("RESULT: " + result);
 
     }
 
@@ -88,7 +93,7 @@ public class Day01 {
             } else {
                 String auxString = line.substring(iterations, iterations + 6);
                 for(String numberAsString: numbersMap.keySet()) {
-                    if(auxString.contains(numberAsString)) {
+                    if(auxString.contains(numberAsString) && firstPosition(numberAsString, line)) {
                         returnValue = numbersMap.get(numberAsString);
                         doContinue = false;
                     }
@@ -97,6 +102,17 @@ public class Day01 {
             iterations += 1;
         } while (doContinue);
         return returnValue;
+    }
+
+    private static boolean firstPosition(String numberAsString, String stringToCompare) {
+        boolean result = true;
+        for (int i = 0; i < numberAsString.length(); i++) {
+            if (numberAsString.charAt(i) != stringToCompare.charAt(i)) {
+                result = false;
+                break;
+            }
+        }
+        return result;
     }
 
     private static Integer lastNumberInLinePart2(String line) {
@@ -108,8 +124,8 @@ public class Day01 {
             if (Character.isDigit(currentChar)) {
                 doContinue = false;
                 returnValue = (int) currentChar;
-            } else if (!(iterations + 5 > line.length())) {
-                String auxString = line.substring(iterations, iterations + 5);
+            } else {
+                String auxString = iterations < line.length() - 5 ? line.substring(iterations, iterations+ 5) : line.substring(iterations);
                 for(String numberAsString: numbersMap.keySet()) {
                     if(auxString.contains(numberAsString)) {
                         returnValue = numbersMap.get(numberAsString);
