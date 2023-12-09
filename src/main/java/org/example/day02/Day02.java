@@ -1,6 +1,6 @@
 package org.example.day02;
 
-import org.example.commons.CommonUtils;
+//import org.example.commons.CommonUtils;
 import org.example.commons.OpenFile;
 
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class Day02 {
 
-    public static final String sampleInputPath = "/Users/martin/Documents/avalon/aoc23/src/main/java/org/example/day02/Day02SampleInput.txt";
+    // public static final String sampleInputPath = "/Users/martin/Documents/avalon/aoc23/src/main/java/org/example/day02/Day02SampleInput.txt";
 
     public static final String inputPath = "/Users/martin/Documents/avalon/aoc23/src/main/java/org/example/day02/Day02Input.txt";
 
@@ -22,11 +22,12 @@ public class Day02 {
 
     final static OpenFile openFile = new OpenFile();
 
-    final static CommonUtils commonUtils = new CommonUtils();
+    // final static CommonUtils commonUtils = new CommonUtils();
 
     public static void main(String[] args) throws IOException {
 
         fillMap();
+        partOneResult(openFile.readAllFile(inputPath));
         partTwoResult(openFile.readAllFile(inputPath));
 
     }
@@ -48,7 +49,7 @@ public class Day02 {
     }
 
     private static void partTwoResult(List<String> fileLines) {
-        Integer result = 0;
+        int result = 0;
         for(String line: fileLines) {
             result += processLineV2(line);
         }
@@ -62,8 +63,8 @@ public class Day02 {
         List<String> resultList = mergeAllCubesFromGame(auxArray[1]);
         boolean isValidGame = true;
         for(String color: resultList) {
-            String[] splittedBySpace = color.trim().split(" ");
-            if (Integer.parseInt(splittedBySpace[0]) > maxValues.get(splittedBySpace[1])) {
+            String[] splitBySpace = color.trim().split(" ");
+            if (Integer.parseInt(splitBySpace[0]) > maxValues.get(splitBySpace[1])) {
                 isValidGame = false;
             }
         }
@@ -81,17 +82,15 @@ public class Day02 {
         List<String> mergedLine = mergeAllCubesFromGame(line.split(":")[1]);
 
         for (String color: mergedLine) {
-            String[] splittedColor = color.trim().split(" ");
-            int colorValue = Integer.parseInt(splittedColor[0]);
-            String colorName = splittedColor[1];
+            String[] splitColor = color.trim().split(" ");
+            int colorValue = Integer.parseInt(splitColor[0]);
+            String colorName = splitColor[1];
             if (colorValue > maxValuePerColor.get(colorName)) {
                 maxValuePerColor.put(colorName, colorValue);
             }
         }
         AtomicInteger aux = new AtomicInteger(1);
-        maxValuePerColor.forEach((k, v) -> {
-            aux.updateAndGet(v1 -> v1 * v);
-        });
+        maxValuePerColor.forEach((k, v) -> aux.updateAndGet(v1 -> v1 * v));
 
         return aux.get();
     }
