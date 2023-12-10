@@ -12,7 +12,7 @@ import java.util.Map;
 public class Day01 {
 
     private static final String sampleInputPath = "C:\\Users\\nerv\\Documents\\avalon\\adventOfCode23\\src\\main\\java\\org\\example\\day01\\Day01SampleInput.txt";
-    private static final String inputPath = "C:\\Users\\nerv\\Documents\\avalon\\adventOfCode23\\src\\main\\java\\org\\example\\day01\\Day01Input.txt";
+    private static final String inputPath = "/Users/martin/Documents/avalon/aoc23/src/main/java/org/example/day01/Day01Input.txt";
     private static final String sampleInputPathV2 = "src/main/java/org/example/day01/Day01SampleInputPart2.txt";
 
     final static OpenFile openFile = new OpenFile();
@@ -29,7 +29,6 @@ public class Day01 {
 
     private static void partOneResult() throws IOException {
         final List<String> fileLines = openFile.readAllFile(inputPath);
-        commonUtils.logList(fileLines);
 
         List<char[]> fileLinesAsCharArrays = new ArrayList<>();
         for(String line: fileLines) {
@@ -69,12 +68,13 @@ public class Day01 {
         int result = 0;
         numbersMap = createStringIntegerMap();
 
-        final List<String> fileLines = openFile.readAllFile(sampleInputPathV2);
+        final List<String> fileLines = openFile.readAllFile(inputPath);
         commonUtils.logList(fileLines);
 
         for(String line: fileLines) {
-            System.out.println(line);
+            System.out.println("LINE: " + line);
             result += firstNumberInLinePart2(line) * 10 + lastNumberInLinePart2(line);
+            System.out.println(" ");
         }
 
         System.out.println("RESULT: " + result);
@@ -89,11 +89,11 @@ public class Day01 {
             char currentChar = line.charAt(iterations);
             if (Character.isDigit(currentChar)) {
                 doContinue = false;
-                returnValue = (int) currentChar;
+                returnValue = Integer.parseInt(String.valueOf(currentChar));
             } else {
-                String auxString = line.substring(iterations, iterations + 6);
+                String auxString = line.substring(iterations, iterations + 6 > line.length() ? line.length() - 1 : iterations + 6);
                 for(String numberAsString: numbersMap.keySet()) {
-                    if(auxString.contains(numberAsString) && firstPosition(numberAsString, line)) {
+                    if(auxString.contains(numberAsString) && firstPosition(numberAsString, auxString)) {
                         returnValue = numbersMap.get(numberAsString);
                         doContinue = false;
                     }
@@ -101,6 +101,8 @@ public class Day01 {
             }
             iterations += 1;
         } while (doContinue);
+
+        System.out.println("First number of the line: " + returnValue);
         return returnValue;
     }
 
@@ -123,11 +125,11 @@ public class Day01 {
             char currentChar = line.charAt(iterations);
             if (Character.isDigit(currentChar)) {
                 doContinue = false;
-                returnValue = (int) currentChar;
+                returnValue = Integer.parseInt(String.valueOf(currentChar));
             } else {
                 String auxString = iterations < line.length() - 5 ? line.substring(iterations, iterations+ 5) : line.substring(iterations);
                 for(String numberAsString: numbersMap.keySet()) {
-                    if(auxString.contains(numberAsString)) {
+                    if(auxString.contains(numberAsString)  && firstPosition(numberAsString, auxString)) {
                         returnValue = numbersMap.get(numberAsString);
                         doContinue = false;
                     }
